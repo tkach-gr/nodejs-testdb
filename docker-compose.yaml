@@ -1,0 +1,35 @@
+version: '3.5'
+
+services:
+  database:
+    container_name: database
+    image: postgres:15.0-alpine
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=root
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+
+  database_manual:
+    container_name: database_manual
+    image: postgres:15.0-alpine
+    ports:
+      - "5434:5432"
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=root
+    volumes:
+      - ./postgres-manual:/var/lib/postgresql/data
+
+  database_orm:
+    container_name: database_orm
+    image: postgres:15.0-alpine
+    ports:
+      - "5435:5432"
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=root
+    volumes:
+      - ./postgres-orm:/var/lib/postgresql/data
