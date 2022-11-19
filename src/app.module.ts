@@ -8,6 +8,8 @@ import { User } from './user/entities/user.entity';
 import { UserDetails } from './user/entities/user-details.entity';
 import { ProductModule } from './product/product.module';
 import { Product } from './product/entities/product.entity';
+import { CartModule } from './cart/cart.module';
+import { Cart } from './cart/entities/cart.entity';
 
 @Module({
   imports: [
@@ -18,11 +20,12 @@ import { Product } from './product/entities/product.entity';
       username: 'admin',
       password: 'root',
       database: 'postgres',
-      entities: [User, UserDetails, Product],
+      entities: [User, UserDetails, Product, Cart],
       synchronize: true,
     }),
     UserModule,
     ProductModule,
+    CartModule,
   ],
   controllers: [AppController],
   providers: [AppService],
