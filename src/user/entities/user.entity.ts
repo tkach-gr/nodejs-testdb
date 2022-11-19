@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { UserDetails } from './user-details.entity';
 import { Cart } from '../../cart/entities/cart.entity';
+import { Order } from '../../order/entities/order.entity';
 
 @Entity()
 export class User {
@@ -24,4 +25,7 @@ export class User {
 
   @OneToMany(() => Cart, (cart) => cart.user)
   cart: Cart[];
+
+  @OneToMany(() => Order, (order) => order.user)
+  orders: Order[];
 }

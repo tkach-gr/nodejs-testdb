@@ -10,6 +10,8 @@ import { ProductModule } from './product/product.module';
 import { Product } from './product/entities/product.entity';
 import { CartModule } from './cart/cart.module';
 import { Cart } from './cart/entities/cart.entity';
+import { OrderModule } from './order/order.module';
+import { Order } from './order/entities/order.entity';
 
 @Module({
   imports: [
@@ -20,12 +22,13 @@ import { Cart } from './cart/entities/cart.entity';
       username: 'admin',
       password: 'root',
       database: 'postgres',
-      entities: [User, UserDetails, Product, Cart],
+      entities: [User, UserDetails, Product, Cart, Order],
       synchronize: true,
     }),
     UserModule,
     ProductModule,
     CartModule,
+    OrderModule,
   ],
   controllers: [AppController],
   providers: [AppService],
