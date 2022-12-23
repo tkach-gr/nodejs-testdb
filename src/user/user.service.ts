@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -6,11 +6,16 @@ import { User } from './entities/user.entity';
 import { DataSource, Repository } from 'typeorm';
 import { UserDetails } from './entities/user-details.entity';
 import { PaginationDto } from './dto/pagination.dto';
+import { PG_REPOSITORY } from '../constants';
+import { PgRepository } from '../pg/pg.repository';
 
 @Injectable()
 export class UserService {
   constructor(
     private dataSource: DataSource,
+
+    @Inject(PG_REPOSITORY)
+    private pgRepository: PgRepository,
 
     @InjectRepository(User)
     private usersRepository: Repository<User>,
@@ -36,29 +41,46 @@ export class UserService {
   }
 
   async findAll(pagination: PaginationDto) {
-    const limit = pagination.limit;
-    const offset = pagination.offset;
+    const count = await this.pgRepository.countAllUsers();
+    const users = await this.pgRepository.findAll(pagination);
 
-    const [users, count] = await this.usersRepository
-      .createQueryBuilder()
-      // .leftJoinAndSelect('User.details', 'UserDetails')
-      .limit(pagination.limit)
-      .offset(pagination.offset)
-      .getManyAndCount();
+    return {
+      users,
+      count,
+      limit: pagination.limit,
+      offset: pagination.offset,
+    };
 
-    return { users, count, limit, offset };
+    // const limit = pagination.limit;
+    // const offset = pagination.offset;
+    //
+    // const [users, count] = await this.usersRepository
+    //   .createQueryBuilder()
+    //   // .leftJoinAndSelect('User.details', 'UserDetails')
+    //   .limit(pagination.limit)
+    //   .offset(pagination.offset)
+    //   .getManyAndCount();
+    //
+    // return { users, count, limit, offset };
   }
 
   async findOne(id: number) {
-    const entity = await this.usersRepository.findOne({
-      where: { id },
-      relations: ['details'],
-    });
-    if (!entity) {
+    const user = await this.pgRepository.findOne(id);
+    if (!user) {
       throw new BadRequestException('invalid user id');
     }
 
-    return entity;
+    return user;
+
+    // const entity = await this.usersRepository.findOne({
+    //   where: { id },
+    //   relations: ['details'],
+    // });
+    // if (!entity) {
+    //   throw new BadRequestException('invalid user id');
+    // }
+    //
+    // return entity;
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {

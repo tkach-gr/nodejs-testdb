@@ -12,6 +12,7 @@ import { CartModule } from './cart/cart.module';
 import { Cart } from './cart/entities/cart.entity';
 import { OrderModule } from './order/order.module';
 import { Order } from './order/entities/order.entity';
+import { PgModule } from './pg/pg.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { Order } from './order/entities/order.entity';
       entities: [User, UserDetails, Product, Cart, Order],
       synchronize: true,
     }),
+    PgModule,
     UserModule,
     ProductModule,
     CartModule,

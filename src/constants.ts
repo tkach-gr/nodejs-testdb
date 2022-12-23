@@ -1,0 +1,1 @@
+export const PG_REPOSITORY = 'PG_REPOSITORY';
